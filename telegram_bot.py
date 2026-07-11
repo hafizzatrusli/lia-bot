@@ -2,7 +2,6 @@ import os, logging, json
 from flask import Flask, request, jsonify
 import requests
 
-# ─── CONFIG ───
 BOT_TOKEN = "8748341489:AAEMVivrhW0-4H8wG1osngHNRWJfIaT5laM"
 ADMIN_CHAT_ID = None
 BASE_URL = f"https://api.telegram.org/bot{BOT_TOKEN}"
@@ -37,13 +36,13 @@ WELCOME = "👋 *Assalamualaikum & Welcome!*\n\nI'm Lia, Hafizzat Rusli's virtua
 
 HR_AI_MSG = "🤖 *HR AI — Automated Trading Systems*\n\nBuilt for serious traders who want *consistent, automated execution* on MT5.\n\n✅ Delta-neutral strategies\n✅ Quant-tested & validated\n✅ FxPro compatible\n✅ 24/7 automated execution\n\n👉 *Self-Serve:* RM28,149\n👉 *Turnkey:* RM45,873\n\nTap Contact below to see live case studies."
 
-COURSE_MSG = "📚 *Turn Charts Into Cashflow*\n\n1,200+ students trained • 87% profitable in 30 days\n\n📖 *What you'll learn:*\n• Price action mastery\n• Risk management frameworks\n• System building & backtesting\n• Live mentoring & community\n\n💰 *Investment:* RM28 – RM45 (one-time)\n\nTap below to join the next batch!"
+COURSE_MSG = "📚 *Turn Charts Into Cashflow*\n\n*Ready to Turn Charts Into Cashflow?*\n\n✅ 1,200+ Students Trained\n✅ 87% Reached Profitability Within 30 Days\n✅ Lifetime Access to Course Materials\n✅ Exclusive VIP WhatsApp Support Group\n\n⚠️ Only 50 Seats Available — Next Intake: KL\n\n💎 *Choose Your Path:*\n• Basic — RM5,000\n• Intermediate — RM10,000\n• Advanced — RM20,000\n• Ultimate — RM40,000\n• ♾️ Infinite Access (Best Value) — RM80,000\n\n👇 Register or ask below!"
 
-PRICING_MSG = "💰 *Pricing*\n\n━━━━━━━━━━━━━━━━━\n🤖 *HR AI Trading Systems*\n• Self-Serve: RM28,149\n• Turnkey: RM45,873\n\n📚 *Turn Charts Into Cashflow*\n• RM28 – RM45\n\n💳 *Payment:* BTC / USDT / USDC\n━━━━━━━━━━━━━━━━━"
+PRICING_MSG = "💰 *Pricing*\n\n━━━━━━━━━━━━━━━━━\n🤖 *HR AI Trading Systems*\n• Self-Serve: RM28,149\n• Turnkey: RM45,873\n\n📚 *Turn Charts Into Cashflow*\n• Basic: RM5,000\n• Intermediate: RM10,000\n• Advanced: RM20,000\n• Ultimate: RM40,000\n• Infinite: RM80,000\n\n💳 *Payment:* BTC / USDT / USDC\n━━━━━━━━━━━━━━━━━"
 
 CONTACT_MSG = "📞 *Contact Hafizzat Rusli*\n\n💬 *WhatsApp:* wa.me/60133355669\n📱 *Telegram:* @MsRinaC\n📧 *IG/FB:* @hafizzatrusli\n🎥 *YouTube:* @HafizzatRusli"
 
-COURSE_CONTACT_MSG = "📚 *Course Inquiry*\n\nReady to join Turn Charts Into Cashflow?\n\n📱 WhatsApp: wa.me/60133355669\n💬 Say you're from Telegram bot!\n\nOr fill: https://whatsform.com/ghwpgv"
+COURSE_CONTACT_MSG = "📚 *Course Registration*\n\nReady to join Turn Charts Into Cashflow?\n\n📱 Register: https://whatsform.com/ghwpgv\n💬 Once submitted, our team will WhatsApp you to reserve your seat!\n\n📞 Or WhatsApp now: wa.me/60133355669"
 
 def send_msg(chat_id, text, reply_markup=None, parse_mode="Markdown"):
     payload = {"chat_id": chat_id, "text": text, "parse_mode": parse_mode}
@@ -103,8 +102,8 @@ def handle_callback(chat_id, message_id, data):
     elif data == "course_contact":
         edit_msg(chat_id, message_id, COURSE_CONTACT_MSG, reply_markup={
             "inline_keyboard": [
-                [{"text": "📱 WhatsApp Now", "url": "https://wa.me/60133355669"}],
-                [{"text": "📝 Fill Form", "url": "https://whatsform.com/ghwpgv"}],
+                [{"text": "📱 Register Now", "url": "https://whatsform.com/ghwpgv"}],
+                [{"text": "💬 WhatsApp Now", "url": "https://wa.me/60133355669"}],
                 [{"text": "⬅️ Back to Menu", "callback_data": "main_menu"}]
             ]
         })
