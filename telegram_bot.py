@@ -2,7 +2,11 @@ import os, logging, json, time
 from flask import Flask, request, jsonify
 import requests
 
-BOT_TOKEN = "8748341489:AAEMVivrhW0-4H8wG1osngHNRWJfIaT5laM"
+# 🔐 Token from environment variable (NOT hardcoded!)
+BOT_TOKEN = os.environ.get("BOT_TOKEN")
+if not BOT_TOKEN:
+    raise RuntimeError("BOT_TOKEN environment variable not set!")
+
 BASE_URL = f"https://api.telegram.org/bot{BOT_TOKEN}"
 LEADS_FILE = "/tmp/leads.json"
 
@@ -118,7 +122,6 @@ def notify_admin(t):
 
 def handle_start(chat_id):
     send_msg(chat_id, WELCOME, main_menu())
-    # Send admin welcome only to the fixed admin
     if chat_id == ADMIN_CHAT_ID:
         send_msg(chat_id, "✅ You're the admin. Lead notifications go here.")
     track_lead(chat_id, "started")
