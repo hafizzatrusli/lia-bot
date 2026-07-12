@@ -5,7 +5,9 @@ import requests
 BOT_TOKEN = "8748341489:AAEMVivrhW0-4H8wG1osngHNRWJfIaT5laM"
 BASE_URL = f"https://api.telegram.org/bot{BOT_TOKEN}"
 LEADS_FILE = "/tmp/leads.json"
-CONFIG_FILE = "/tmp/config.json"
+
+# 🔐 Fixed admin — Hafizzat only
+ADMIN_CHAT_ID = 102212863
 
 app = Flask(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -20,13 +22,6 @@ def load_json(f):
 def save_json(f, d):
     with open(f,"w") as fp:
         json.dump(d, fp)
-
-def get_admin():
-    cfg = load_json(CONFIG_FILE)
-    return cfg.get("admin_chat_id")
-
-def set_admin(cid):
-    save_json(CONFIG_FILE, {"admin_chat_id": cid})
 
 def load_leads():
     return load_json(LEADS_FILE)
@@ -119,14 +114,13 @@ def edit_msg(cid, mid, text, rm=None, pm="Markdown"):
     if rm: p["reply_markup"] = json.dumps(rm)
     requests.post(f"{BASE_URL}/editMessageText", json=p, timeout=10)
 def notify_admin(t):
-    admin = get_admin()
-    if admin: send_msg(admin, f"📬 *New Lead*\n\n{t}")
+    send_msg(ADMIN_CHAT_ID, f"📬 *New Lead*\n\n{t}")
 
 def handle_start(chat_id):
     send_msg(chat_id, WELCOME, main_menu())
-    if get_admin() is None:
-        set_admin(chat_id)
-        send_msg(chat_id, "✅ You're now set as admin. You'll receive lead notifications here.")
+    # Send admin welcome only to the fixed admin
+    if chat_id == ADMIN_CHAT_ID:
+        send_msg(chat_id, "✅ You're the admin. Lead notifications go here.")
     track_lead(chat_id, "started")
 
 def handle_callback(chat_id, message_id, data, cb_id):
@@ -153,8 +147,7 @@ def handle_callback(chat_id, message_id, data, cb_id):
 
 def handle_message(chat_id, text):
     track_lead(chat_id, f"msg:{text[:50]}")
-    admin = get_admin()
-    if admin and chat_id != admin:
+    if chat_id != ADMIN_CHAT_ID:
         notify_admin(f"📩 *Msg*\nChat: `{chat_id}`\nText: _{text}_")
         send_msg(chat_id, "Thanks! Hafizzat will reply soon 🙏\n\nCheck menu 👆", main_menu())
 
